@@ -26,7 +26,7 @@
  *
  * @author Ianaré Sévi
  */
-class EGoogleAnalytics extends CWidget
+class EGoogleAnalytics extends CApplicationComponent
 {
 	/**
 	 * @var string The full web property ID (e.g. UA-65432-1) for the tracker object.
@@ -125,6 +125,11 @@ class EGoogleAnalytics extends CWidget
 	 */
 	public $transactions = array();
 
+	/**
+	 * @var string CClientScript position. 
+	 */
+	public $position = CClientScript::POS_HEAD;
+
 	public function run()
 	{
 		if (!$this->account)
@@ -144,11 +149,11 @@ class EGoogleAnalytics extends CWidget
 		}
 		$items = '';
 		foreach ($this->items as $item) {
-			$items .= "_gaq.push(['_addTrans', '{$item['orderId']}', '{$item['sku']}', '{$item['name']}', '{$item['category']}', '{$item['price']}', '{$item['quantity']}']);";
+			$items .= "_gaq.push(['_addTrans', '{$item['orderId']}', '{$item['sku']}', '{$item['name']}', '{$item['category']}', '{$item['price']}', '{$item['quantity']}']);\n";
 		}
 		$transactions = '';
 		foreach ($this->transactions as $trans) {
-			$transactions .= "_gaq.push(['_addTrans', '{$trans['orderId']}', '{$trans['affiliation']}', '{$trans['total']}', '{$trans['tax']}', '{$trans['shipping']}', '{$trans['city']}', '{$trans['state']}', '{$trans['country']}']);";
+			$transactions .= "_gaq.push(['_addTrans', '{$trans['orderId']}', '{$trans['affiliation']}', '{$trans['total']}', '{$trans['tax']}', '{$trans['shipping']}', '{$trans['city']}', '{$trans['state']}', '{$trans['country']}']);\n";
 		}
 		$trackTrans = '';
 		if (!empty($items) || !empty($transactions))
@@ -175,8 +180,7 @@ class EGoogleAnalytics extends CWidget
                 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
             })();";
 
-		Yii::app()->getClientScript()->registerScript('google-analytics', $script, CClientScript::POS_HEAD
-		);
+		Yii::app()->getClientScript()->registerScript('google-analytics', $script, $this->position);
 	}
 
 }

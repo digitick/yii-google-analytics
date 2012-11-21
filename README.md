@@ -28,6 +28,7 @@ Add the widget in your main layout, this will make it show up on all pages.
 Widget option descriptions have been divided into sections for better legibility, but all options can be mixed.
 The only requirement is for the account to be set.
 
+###Widget
 
 ####Basic
 ~~~
@@ -119,37 +120,79 @@ $this->widget('ext.google-analytics.EGoogleAnalytics', array(
 ~~~
 
 
-###Global Options
+###Global Widget Options
 You can use the Yii configuration file to set options globally throughout your application.
 ~~~
 [php]
-return array(
-    'components' => array(
-        'widgetFactory' => array(
-            'widgets' => array(
-                'EGoogleAnalytics' => array(
-                    'account' => 'UA-XXXXX-X',
-                    'domainName' => 'example.com',
-                ),
+'components' => array(
+    'widgetFactory' => array(
+        'widgets' => array(
+            'EGoogleAnalytics' => array(
+            'account' => 'UA-XXXXX-X',
+            'domainName' => 'example.com',
             ),
         ),
     ),
-);
+),
+~~~
+
+###Application Component
+You may also use the class as an application component.
+
+~~~
+[php]
+'components' => array(
+    'googleAnalytics' => array(
+        'class' => 'ext.google-analytics.EGoogleAnalytics',
+        'account' => 'UA-XXXXX-X',
+        'domainName' => 'example.com',
+    ),
+),
+~~~
+
+Then in your base controller class:
+~~~
+[php]
+public function beforeRender($view)
+{
+    Yii::app()->googleAnalytics->run();
+
+    return parent::beforeRender($view);
+}
+~~~
+
+This allows you to set any of the options before doing the render.
+
+It's most usefull to use for the e-commerce functions.
+~~~
+[php]
+public function actionOrderComplete()
+{
+    Yii::app()->googleAnalytics->items = array(
+        array(
+            'orderId' => '1234',
+            'sku' => 'DD44',
+            'name' => 'T-Shirt',
+            'category' => 'Olive Medium',
+            'price' => '11.99',
+            'quantity' => '1'
+        ),
+        array(
+            'orderId' => '1234',
+            'sku' => 'DD45',
+            'name' => 'T-Shirt',
+            'category' => 'Black Medium',
+            'price' => '10.99',
+            'quantity' => '1'
+        ),
+    );
+
+    $this-render('orderComplete');
+}
 ~~~
 
 ##Resources
 
 * [Google Analytics Tracking Basics](https://developers.google.com/analytics/devguides/collection/gajs "Google Analytics Tracking Basics") Official documentation
 * [Github](https://github.com/digitick/yii-google-analytics) Fork it!
-
-
-
-
-
-
-
-
-
-
-
-
+* [Yii Extension Page](http://www.yiiframework.com/extension/google-analytics-ng)

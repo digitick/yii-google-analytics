@@ -88,7 +88,7 @@ $this->widget('ext.google-analytics.EGoogleAnalytics', array(
          'name' => 'T-Shirt',
          'category' => 'Black Medium',
          'price' => '10.99',
-         'quantity' => '2'
+         'quantity' => '1'
       ),
    ),
    'transactions' => array(
@@ -106,8 +106,21 @@ $this->widget('ext.google-analytics.EGoogleAnalytics', array(
 ));
 ~~~
 
+
+####Web Client
+~~~
+[php]
+$this->widget('ext.google-analytics.EGoogleAnalytics', array(
+   'account' => 'UA-XXXXX-X',
+   'clientInfo' => true,
+   'detectFlash' => true,
+   'detectTitle' => true,
+));
+~~~
+
+
 ###Global Options
-You can use the Yii configuration file to set options globally throught your application.
+You can use the Yii configuration file to set options globally throughout your application.
 ~~~
 [php]
 return array(

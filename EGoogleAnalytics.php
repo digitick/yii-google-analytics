@@ -149,7 +149,7 @@ class EGoogleAnalytics extends CApplicationComponent
 		}
 		$items = '';
 		foreach ($this->items as $item) {
-			$items .= "_gaq.push(['_addTrans', '{$item['orderId']}', '{$item['sku']}', '{$item['name']}', '{$item['category']}', '{$item['price']}', '{$item['quantity']}']);\n";
+			$items .= "_gaq.push(['_addItem', '{$item['orderId']}', '{$item['sku']}', '{$item['name']}', '{$item['category']}', '{$item['price']}', '{$item['quantity']}']);\n";
 		}
 		$transactions = '';
 		foreach ($this->transactions as $trans) {

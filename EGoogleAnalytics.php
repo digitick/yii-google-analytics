@@ -90,6 +90,12 @@ class EGoogleAnalytics extends CApplicationComponent
 	 * @var boolean the title detection flag.
 	 */
 	public $detectTitle = true;
+	
+	/**
+	 * @var string the new sample set size for Site Speed data collection. By default, Google Analytics
+	 * sets the site speed sample rate to 1%.
+	 */
+	public $siteSpeedSampleRate;
 
 	/**
 	 * @var array items purchased, multidimensional.
@@ -172,6 +178,8 @@ class EGoogleAnalytics extends CApplicationComponent
 			$script .= "_gaq.push(['_setDetectFlash', false]);\n";
 		if (!$this->detectTitle)
 			$script .= "_gaq.push(['_setDetectTitle', false]);\n";
+		if ($this->siteSpeedSampleRate)
+			$script .= "_gaq.push(['_setSiteSpeedSampleRate', {$this->siteSpeedSampleRate}]);\n";
 		$script .= "_gaq.push(['_trackPageview']);\n";
 		$script .= $items . $transactions . $trackTrans;
 		$script .= "(function() {

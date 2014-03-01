@@ -144,6 +144,7 @@ You may also use the class as an application component.
 'components' => array(
     'googleAnalytics' => array(
         'class' => 'ext.google-analytics.EGoogleAnalytics',
+        'enabled' => true, // Set to false to disable for example on local test servers
         'account' => 'UA-XXXXX-X',
         'domainName' => 'example.com',
     ),
@@ -155,7 +156,8 @@ Then in your base controller class:
 [php]
 public function beforeRender($view)
 {
-    Yii::app()->googleAnalytics->run();
+    if ($googleAnalytics = Yii::app()->getComponent('googleAnalytics'))
+       $googleAnalytics->run();
 
     return parent::beforeRender($view);
 }

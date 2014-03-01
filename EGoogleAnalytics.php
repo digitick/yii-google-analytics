@@ -28,6 +28,29 @@
  */
 class EGoogleAnalytics extends CApplicationComponent
 {
+
+    /**
+     * @var string Option to add additional parameters to _trackPageview.
+     * This allows support of custom 404 error tracking
+     * like the one described here:
+     * http://www.bluefountainmedia.com/blog/track-404-errors-in-google-analytics/
+     * <code>
+     * public function beforeRender($view)
+     * {
+     *     if ($googleAnalytics = Yii::app()->getComponent('googleAnalytics'))
+     *     {
+     *         if($error = Yii::app()->errorHandler->error)
+     *             $googleAnalytics->trackPageviewParam = "'/error/{$error['code']}?url=' + document.location.pathname + document.location.search + '&ref=' + document.referrer";
+     *
+     *         $googleAnalytics->run();
+     *     }
+     *
+     * return parent::beforeRender($view);
+     * }
+     * </code>
+     */
+    public $trackPageviewParam;
+
 	/**
 	 * @var string The full web property ID (e.g. UA-65432-1) for the tracker object.
 	 */
@@ -180,7 +203,10 @@ class EGoogleAnalytics extends CApplicationComponent
 			$script .= "_gaq.push(['_setDetectTitle', false]);\n";
 		if ($this->siteSpeedSampleRate)
 			$script .= "_gaq.push(['_setSiteSpeedSampleRate', {$this->siteSpeedSampleRate}]);\n";
-		$script .= "_gaq.push(['_trackPageview']);\n";
+        if ($this->trackPageviewParam)
+            $script .= "_gaq.push(['_trackPageview', {$this->trackPageviewParam}]);\n";
+        else
+            $script .= "_gaq.push(['_trackPageview']);\n";
 		$script .= $items . $transactions . $trackTrans;
 		$script .= "(function() {
                 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

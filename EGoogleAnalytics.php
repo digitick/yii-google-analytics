@@ -90,6 +90,12 @@ class EGoogleAnalytics extends CApplicationComponent
 	 * @var boolean the title detection flag.
 	 */
 	public $detectTitle = true;
+        
+        /**
+         *
+         * @var boolean - Enables Enhanced Link Attribution
+         */
+        public $enableInpageLinkid = false;
 	
 	/**
 	 * @var string the new sample set size for Site Speed data collection. By default, Google Analytics
@@ -166,6 +172,10 @@ class EGoogleAnalytics extends CApplicationComponent
 			$trackTrans = "_gaq.push(['_trackTrans']);\n";
 
 		$script = "var _gaq = _gaq || [];\n";
+                if ($this->enableInpageLinkid){
+                    $script .= "var pluginUrl = '//www.google-analytics.com/plugins/ga/inpage_linkid.js';\n";
+                    $script .= "_gaq.push(['_require', 'inpage_linkid', pluginUrl]);\n";
+                }
 		$script .= "_gaq.push(['_setAccount', '{$this->account}']);\n";
 		$script .= $ignoredOrganics . $ignoredRefs . $organics;
 		$script .= "_gaq.push(['_setDomainName', '{$this->domainName}']);\n";
